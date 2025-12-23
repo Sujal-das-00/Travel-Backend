@@ -1,9 +1,9 @@
 import express from "express";
 import cors from "cors"
 import dotenv from "dotenv"
-import db from "../config/db.js";
 import router from "../router/routes.js";
-
+import { globalErrorHandler } from "../middleware/errohandeler.js";
+import db from "../config/db.js";
 dotenv.config()
 const app = express();
 app.use(express.json())
@@ -22,8 +22,7 @@ app.use("/api",router)
 app.get("/",(req,res)=>{
     res.send("backend is running test");
 })
-
+app.use(globalErrorHandler)
 app.listen(3000,()=>{
     console.log("server is running");
-    
 })

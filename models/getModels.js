@@ -1,7 +1,7 @@
 import Package from "../db_models/blog_Schema.js";
 import registeredGuides from "../db_models/Guide_Schema.js"
-
-
+import GuideForm from "../db_models/GuideForm_Schema.js"
+import mongoose from "mongoose";
 
 
 export const getAllPackageService = async () => {
@@ -12,7 +12,7 @@ console.log(allPackages);
 
         return allPackages;
     } catch (error) {
-        throw new Error("Failed to fetch packages: " + error.message);
+        throw err;
     }
 };
 
@@ -40,7 +40,14 @@ export const getAllGuideServices = async ()=>{
     }
 }
 
-
+export const getGuideRequestService = async ()=>{
+    try {
+        const allguideRequest = await GuideForm.find()
+        return allguideRequest
+    } catch (err) {
+        throw err;
+    }
+}
 
 export const getGuideByIdService = async (guideId)=>{
     try {

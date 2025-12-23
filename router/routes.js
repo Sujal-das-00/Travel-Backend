@@ -1,6 +1,6 @@
 import express from "express"
 import { becomeGuideData, createGuide, saveCustomerInfo } from "../controller/postController.js"
-import { getAllGuide, getAllPackage, getGuideById, getPackageById } from "../controller/getcontroller.js"
+import { getAllGuide, getAllPackage, getGuideById, getGuideRequest, getPackageById } from "../controller/getcontroller.js"
 import { modifyGuide, modifyPackage} from "../controller/patchController.js"
 import { deleteAll, deleteGuide, deletePackage } from "../controller/deleteController.js"
 import { upload } from "../middleware/multer.middleware.js";
@@ -20,7 +20,11 @@ router.post('/v1/save/customer/details',saveCustomerInfo)
 
 router.get('/v1/get/allpackage',getAllPackage)
 router.get('/v1/get/detail/:packageId',getPackageById)
+//get all guide request
+router.get('/v1/get/allGuideRequest',getGuideRequest)
+
 router.get('/v1/get/allGuide',getAllGuide)
+
 router.get('/v1/get/guide/:guideId',getGuideById)
 
 router.patch("/v1/modify/package/:packageId",modifyPackage)

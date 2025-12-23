@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+
 const guideSchema = new mongoose.Schema({
   guideName: {
     type: String,
@@ -32,5 +33,11 @@ const guideSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-});
+  IsVisited:{
+    type:Boolean,
+    required:true,
+    default:false
+  },
+
+},{ timestamps: true });
 export default mongoose.model("GuideForm",guideSchema,"Guide_Form")
