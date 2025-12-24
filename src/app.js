@@ -18,11 +18,15 @@ if (!fs.existsSync(tempDir)) {
     fs.mkdirSync(tempDir, { recursive: true });
     console.log("✅ Created temp directory");
 }
-app.use("/api",router)
 app.get("/",(req,res)=>{
     res.send("backend is running test");
 })
+app.use("/api",router)
+
 app.use(globalErrorHandler)
-app.listen(3000,()=>{
-    console.log("server is running");
+const PORT = process.env.PORT || 3000;
+
+
+app.listen(PORT,()=>{
+    console.log("server is running",PORT);
 })
