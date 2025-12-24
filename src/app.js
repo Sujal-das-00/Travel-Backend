@@ -1,32 +1,58 @@
 import express from "express";
-import cors from "cors"
-import dotenv from "dotenv"
+import cors from "cors";
+import dotenv from "dotenv";
+import session from "express-session";
 import router from "../router/routes.js";
 import { globalErrorHandler } from "../middleware/errohandeler.js";
 import db from "../config/db.js";
-dotenv.config()
-const app = express();
-app.use(express.json())
-app.use(cors());
 import fs from "fs";
 import path from "path";
-// ... other imports
 
-// Create temp directory if it doesn't exist
+dotenv.config();
+const app = express();
+
+/* ---------- CORE MIDDLEWARE ---------- */
+app.use(express.json());
+
+app.use(cors({
+  origin: "http://localhost:3000", // frontend URL
+  credentials: true
+}));
+
+/* ---------- SESSION (MUST BE BEFORE ROUTES) ---------- */
+app.use(
+  session({
+    name: "admin-session",
+    secret: process.env.SESSION_SECRET || "dev_secret",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: false, // true only on HTTPS
+      maxAge: 24 * 60 * 60 * 1000
+    }
+  })
+);
+
+/* ---------- TEMP DIR ---------- */
 const tempDir = path.join(process.cwd(), "temp");
 if (!fs.existsSync(tempDir)) {
-    fs.mkdirSync(tempDir, { recursive: true });
-    console.log("✅ Created temp directory");
+  fs.mkdirSync(tempDir, { recursive: true });
+  console.log("✅ Created temp directory");
 }
-app.get("/",(req,res)=>{
-    res.send("backend is running test");
-})
-app.use("/api",router)
 
-app.use(globalErrorHandler)
+/* ---------- ROUTES ---------- */
+app.get("/", (req, res) => {
+  res.send("backend is running test");
+});
+
+app.use("/api", router);
+
+/* ---------- ERROR HANDLER ---------- */
+app.use(globalErrorHandler);
+
+/* ---------- SERVER ---------- */
 const PORT = process.env.PORT || 3000;
-
-
-app.listen(PORT,()=>{
-    console.log("server is running",PORT);
-})
+app.listen(PORT, () => {
+  console.log("server is running", PORT);
+});
