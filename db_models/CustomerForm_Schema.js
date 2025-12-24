@@ -31,6 +31,11 @@ const customerSchema = new mongoose.Schema({
         type: Number,
         required: true,
         min: 1
-    }
+    },
+    IsVisited: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
 });
-export default mongoose.model("Customer",customerSchema,"Customer");
+export default mongoose.model("Customer", customerSchema, "Customer");

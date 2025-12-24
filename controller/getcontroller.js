@@ -1,4 +1,4 @@
-import { getAllGuideServices, getAllPackageService, getGuideByIdService, getGuideRequestService, getPackageByIdService } from "../models/getModels.js";
+import { getAllGuideServices, getAllPackageService, getCustomerRequestService, getGuideByIdService, getGuideRequestService, getPackageByIdService } from "../models/getModels.js";
 import { handelResponse } from "./postController.js";
 
 
@@ -43,7 +43,17 @@ export const getAllGuide = async (req, res, next) => {
         next(err)
     }
 }
+export const getCustomerRequest = async (req,res,next)=>{
+    try {
+        const allCustomerData = await getCustomerRequestService();
+        if(!allCustomerData)
+            return handelResponse(res,404,"No Customer Request Found",allCustomerData);
+        return handelResponse(res,200,"data fetched sucessfully",allCustomerData)
 
+    } catch (err) {
+        next(err);
+    }
+}
 export const getGuideRequest = async (req, res, next) => {
     try {
         const allGuideRequest = await getGuideRequestService();

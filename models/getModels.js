@@ -1,7 +1,7 @@
 import Package from "../db_models/blog_Schema.js";
 import registeredGuides from "../db_models/Guide_Schema.js"
 import GuideForm from "../db_models/GuideForm_Schema.js"
-import mongoose from "mongoose";
+import Customer from "../db_models/CustomerForm_Schema.js";
 
 
 export const getAllPackageService = async () => {
@@ -42,7 +42,7 @@ export const getAllGuideServices = async ()=>{
 
 export const getGuideRequestService = async ()=>{
     try {
-        const allguideRequest = await GuideForm.find()
+        const allguideRequest = await GuideForm.find({IsVisited: false} )
         return allguideRequest
     } catch (err) {
         throw err;
@@ -59,3 +59,11 @@ export const getGuideByIdService = async (guideId)=>{
     }
 }
 
+export const getCustomerRequestService = async ()=>{
+    try {
+        const allguideRequest = await Customer.find({IsVisited: false} )
+        return allguideRequest
+    } catch (err) {
+        throw err;
+    }
+}
