@@ -1,6 +1,8 @@
 import mongoose, { mongo } from "mongoose";
-const URL = 'mongodb://localhost:27017/Travel_Agency_db';
-mongoose.connect(URL)
+import dotenv from "dotenv";
+dotenv.config();
+// const URL = 'mongodb://localhost:27017/Travel_Agency_db';
+mongoose.connect(process.env.MONGO_URI)
 const db = mongoose.connection;
 db.on("connected",() =>{
     console.log("database connection established")
