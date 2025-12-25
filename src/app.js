@@ -52,6 +52,11 @@ app.use(
 /* ---------- SESSION (MUST BE BEFORE ROUTES) ---------- */
 const isProd = process.env.NODE_ENV === "production";
 
+if (isProd) {
+  app.set("trust proxy", 1); 
+}
+
+/* ---------- SESSION ---------- */
 app.use(
   session({
     name: "admin-session",
@@ -61,12 +66,12 @@ app.use(
     store: MongoStore.create({
       mongoUrl: process.env.MONGO_URI,
       collectionName: "sessions",
-      ttl: 24 * 60 * 60 // 1 day
+      ttl: 24 * 60 * 60 
     }),
     cookie: {
       httpOnly: true,
-      secure: isProd,
-      sameSite: isProd ? "none" : "lax",
+      secure: isProd, 
+      sameSite: isProd ? "none" : "lax", 
       maxAge: 24 * 60 * 60 * 1000
     }
   })
