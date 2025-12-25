@@ -50,7 +50,7 @@ router.get('/v1/get/guide/:guideId',requireAdmin,getGuideById)
 router.patch('/v1/guide-request/mark-visited/:id',requireAdmin, markGuideRequestVisited);
 router.patch('/v1/customer-request/mark-visited/:id',requireAdmin, markCustomerRequestVisited);
 
-router.patch("/v1/modify/package/:packageId",requireAdmin,modifyPackage)
+router.patch("/v1/modify/package/:packageId",upload.any(),requireAdmin,modifyPackage)
 router.patch('/v1/modify/guide/:guideId',requireAdmin,modifyGuide)
 
 router.delete('/v1/delete/package/:packageId',requireAdmin,deletePackage)
