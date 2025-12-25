@@ -7,7 +7,7 @@ import { globalErrorHandler } from "../middleware/errohandeler.js";
 import db from "../config/db.js";
 import fs from "fs";
 import path from "path";
-
+import MongoStore from "connect-mongo";
 dotenv.config();
 const app = express();
 
@@ -26,9 +26,15 @@ app.use(
     secret: process.env.SESSION_SECRET || "dev_secret",
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URI,
+      collectionName: "sessions",
+      ttl: 24 * 60 * 60 // 1 day
+    }),
     cookie: {
       httpOnly: true,
-      secure: false, // true only on HTTPS
+      secure: false, // true if HTTPS
+      sameSite: "lax",
       maxAge: 24 * 60 * 60 * 1000
     }
   })
