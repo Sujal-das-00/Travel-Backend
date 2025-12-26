@@ -1,4 +1,4 @@
-name: Deploy to cPanel
+name: 🚀 Deploy to cPanel (FTP)
 
 on:
   push:
@@ -11,20 +11,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: 📥 Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 2
 
-      - name: FTP Deploy
+      - name: 🚀 FTP Deploy
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.FTP_SERVER }}
+          server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: /app/        # or /app/ or your node folder
+          server-dir: /home9/satoraco/app/
           exclude: |
             **/.git*
-            **/.github*public_html
+            **/.github/**
             **/node_modules/**
             **/.env
