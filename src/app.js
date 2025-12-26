@@ -76,6 +76,11 @@ app.use(
     }
   })
 );
+app.use((req, res, next) => {
+  console.log("🍪 Cookie header:", req.headers.cookie);
+  console.log("🧠 Session:", req.session);
+  next();
+});
 
 /* ---------- TEMP DIR ---------- */
 const tempDir = path.join(process.cwd(), "temp");
