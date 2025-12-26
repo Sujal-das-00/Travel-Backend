@@ -1,9 +1,8 @@
 import crypto from "crypto";
 import fs from "fs";
 import { uploadToCloudinary } from "../utils/cloudnary.service.js";
-import { createNewPackageService } from "../models/postModels.js";
+import { createNewPackageService } from "../models/postModels.js"; 
 import { handelResponse } from "../controller/postController.js";
-
 export const createNewPackage = async (req, res, next) => {
     try {
         let { packageName, packageCategory, displayText, sections } = req.body;
@@ -15,10 +14,15 @@ export const createNewPackage = async (req, res, next) => {
             });
         }
 
-        // Parse sections
-        const parsedSections = JSON.parse(sections);
+        // ✅ SAFE parsing
+        let parsedSections;
+        if (typeof sections === "string") {
+            parsedSections = JSON.parse(sections);
+        } else {
+            parsedSections = sections;
+        }
 
-        // Convert files array to object for easier access
+        // Convert files array to map
         const filesMap = {};
         if (req.files) {
             req.files.forEach(file => {
@@ -31,14 +35,15 @@ export const createNewPackage = async (req, res, next) => {
         let mainImageId = null;
 
         if (filesMap.mainImage) {
-            const file = filesMap.mainImage;
-
-            const upload = await uploadToCloudinary(file.path, "blogs/main");
+            const upload = await uploadToCloudinary(
+                filesMap.mainImage.path,
+                "blogs/main"
+            );
 
             mainImageUrl = upload.secure_url;
             mainImageId = upload.public_id;
 
-            fs.unlinkSync(file.path);
+            fs.unlinkSync(filesMap.mainImage.path);
         }
 
         // SECTION IMAGES
@@ -46,17 +51,20 @@ export const createNewPackage = async (req, res, next) => {
 
         for (let i = 0; i < parsedSections.length; i++) {
             const section = parsedSections[i];
+
             let imageUrl = null;
             let image_id = null;
 
             if (filesMap[`sectionImage_${i}`]) {
-                const file = filesMap[`sectionImage_${i}`];
-                const upload = await uploadToCloudinary(file.path, "blogs/sections");
+                const upload = await uploadToCloudinary(
+                    filesMap[`sectionImage_${i}`].path,
+                    "blogs/sections"
+                );
 
                 imageUrl = upload.secure_url;
                 image_id = upload.public_id;
 
-                fs.unlinkSync(file.path);
+                fs.unlinkSync(filesMap[`sectionImage_${i}`].path);
             }
 
             finalSections.push({
@@ -66,16 +74,15 @@ export const createNewPackage = async (req, res, next) => {
             });
         }
 
-        // Create blogId
         const blogId = crypto.randomBytes(8).toString("hex");
-        
+
         const packageData = {
             packageName,
             packageCategory,
             displayText,
             blogId,
             imageUrl: mainImageUrl,
-            image_id: mainImageId, // Don't forget to add this!
+            image_id: mainImageId,
             sections: finalSections,
         };
 
